@@ -1,0 +1,11 @@
+- Identifies more system accounts.
+- Allow to send file by IO[bytes] objects with newer itchat versions
+- Allow per-bot instance definition of user agent (need accompanied changes in itchat too)
+- Allow the bot not to start immediately when instantiated.
+- Remove registration of cleanup method with atexit.
+- Use filename in XML if possible to avoid improper escape of file name in JSON data
+- Add attribute Message.app_name
+- Add type hints (partially)
+- Remove Python 2 compatibility code
+- Safely overwrite PUID storage to mitigate loss of data caused by improper termination
+- Attempt to prevent thread blocking upon exit during long polling

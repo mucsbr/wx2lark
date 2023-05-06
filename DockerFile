@@ -1,0 +1,7 @@
+FROM python:latest
+
+WORKDIR /wxpy
+COPY . .
+RUN python3 setup.py install
+
+ENTRYPOINT ["python3", "main.py"]
