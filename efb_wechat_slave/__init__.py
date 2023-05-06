@@ -285,8 +285,10 @@ class WeChatChannel:
             print(e)
 
     def start_app(self):
-        threading.Thread(target=self.flask_app, name="flask thread").start()
-        threading.Thread(target=self.send_message, name="send chat thread").start()
+        #先注释掉了，这里是飞书发微信的逻辑
+        pass
+        # threading.Thread(target=self.flask_app, name="flask thread").start()
+        # threading.Thread(target=self.send_message, name="send chat thread").start()
 
     def poll(self):
         self.start_app()

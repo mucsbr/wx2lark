@@ -539,44 +539,45 @@ class SlaveMessageManager:
             }
         }
 
-        try:
-            if msg.raw['MsgType'] == 47 and not msg.raw['Content']:
-                raise EOFError
-            if msg.file_size == 0:
-                raise EOFError
+        if message_api_client is not None:
+            try:
+                if msg.raw['MsgType'] == 47 and not msg.raw['Content']:
+                    raise EOFError
+                if msg.file_size == 0:
+                    raise EOFError
 
-            path, mime, fileIO = self.save_file(msg)
-            # 20M
-            image_key = message_api_client.upload_image(None, fileIO)
-            if image_key != "":
-                lark_msg["msg_type"] = "post"
-                lark_msg["content"] = {
-                    "post": {
-                        "zh_cn": {
-                            "title": user_name + "图片",
-                            "content": [
-                                [
-                                    {
-                                        "tag": "text",
-                                        "text": path.name
-                                    }
-                                ],
-                                [
-                                    {
-                                        "tag": "img",
-                                        "image_key": image_key
-                                    }
+                path, mime, fileIO = self.save_file(msg)
+                # 20M
+                image_key = message_api_client.upload_image(None, fileIO)
+                if image_key != "":
+                    lark_msg["msg_type"] = "post"
+                    lark_msg["content"] = {
+                        "post": {
+                            "zh_cn": {
+                                "title": user_name + "图片",
+                                "content": [
+                                    [
+                                        {
+                                            "tag": "text",
+                                            "text": path.name
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "tag": "img",
+                                            "image_key": image_key
+                                        }
+                                    ]
                                 ]
-                            ]
+                            }
                         }
                     }
-                }
-            else:
+                else:
+                    lark_msg["msg_type"] = "text"
+            except Exception as e:
+                print("save image fail", e)
+                # efb_msg.type = MsgType.Unsupported
                 lark_msg["msg_type"] = "text"
-        except Exception as e:
-            print("save image fail", e)
-            # efb_msg.type = MsgType.Unsupported
-            lark_msg["msg_type"] = "text"
 
         # return efb_msg
         lark_msg_str = json.dumps(lark_msg)
@@ -638,17 +639,18 @@ class SlaveMessageManager:
             }
         }
 
-        try:
-            if is_user:
-                path, _, file = self.save_file(msg)
-                file_key = message_api_client.upload_file(None, file, msg.file_name)
-                if file_key != "":
-                    r = json.dumps({"file_key": file_key})
-                    message_api_client.send_file_msg(r)
-                    # lark_msg["msg_type"] = "file"
-                    # lark_msg["content"] =
-        except Exception as e:
-            print(e)
+        if message_api_client is not None:
+            try:
+                if is_user:
+                    path, _, file = self.save_file(msg)
+                    file_key = message_api_client.upload_file(None, file, msg.file_name)
+                    if file_key != "":
+                        r = json.dumps({"file_key": file_key})
+                        message_api_client.send_file_msg(r)
+                        # lark_msg["msg_type"] = "file"
+                        # lark_msg["content"] =
+            except Exception as e:
+                print(e)
 
         lark_msg_str = json.dumps(lark_msg)
 
@@ -665,17 +667,18 @@ class SlaveMessageManager:
             }
         }
 
-        try:
-            if is_user:
-                path, _, file = self.save_file(msg)
-                file_key = message_api_client.upload_audio(None, file, user_name)
-                if file_key != "":
-                    r = json.dumps({"file_key": file_key})
-                    message_api_client.send_file_msg(r)
-                    # lark_msg["msg_type"] = "file"
-                    # lark_msg["content"] =
-        except Exception as e:
-            print(e)
+        if message_api_client is not None:
+            try:
+                if is_user:
+                    path, _, file = self.save_file(msg)
+                    file_key = message_api_client.upload_audio(None, file, user_name)
+                    if file_key != "":
+                        r = json.dumps({"file_key": file_key})
+                        message_api_client.send_file_msg(r)
+                        # lark_msg["msg_type"] = "file"
+                        # lark_msg["content"] =
+            except Exception as e:
+                print(e)
 
         lark_msg_str = json.dumps(lark_msg)
         # msg.chat.mark_as_read()

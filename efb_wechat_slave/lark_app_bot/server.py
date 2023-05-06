@@ -15,7 +15,7 @@ load_dotenv(find_dotenv())
 app = Flask(__name__)
 
 # init service
-message_api_client = MessageApiClient(APP_ID, APP_SECRET, LARK_HOST)
+# message_api_client = MessageApiClient(APP_ID, APP_SECRET, LARK_HOST)
 event_manager = EventManager()
 
 
@@ -40,7 +40,7 @@ def message_receive_event_handler(req_data: MessageReceiveEvent):
     text_content = message.content
     # echo text message
     print(text_content)
-    message_api_client.send_text_with_open_id(open_id, text_content)
+    # message_api_client.send_text_with_open_id(open_id, text_content)
     return jsonify()
 
 
